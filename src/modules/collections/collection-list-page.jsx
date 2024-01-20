@@ -6,9 +6,17 @@ import { notifications } from "@mantine/notifications";
 import { useCart } from "../../hooks/use-cart";
 import LoadingLayout from "../../components/loading-layout";
 import { DefaultLayout } from "../../components/default-layout";
-import { Button, Card, Image, SimpleGrid, Space, Text } from "@mantine/core";
+import {
+  Button,
+  Card,
+  Flex,
+  Image,
+  SimpleGrid,
+  Space,
+  Text,
+} from "@mantine/core";
 import EmptyLayout from "../../components/empty-layout";
-import { Eye, ShoppingCart, Trash } from "@phosphor-icons/react";
+import { Eye, Plus, ShoppingCart, Trash } from "@phosphor-icons/react";
 import numeral from "numeral";
 
 export default function CollectionListPage({ type = "user" }) {
@@ -31,6 +39,7 @@ export default function CollectionListPage({ type = "user" }) {
         notifications.show({
           message: result.message,
         });
+        navigate(0);
       } catch (e) {
         notifications.show({
           message: e.message,
@@ -39,7 +48,7 @@ export default function CollectionListPage({ type = "user" }) {
         });
       }
     },
-    []
+    [navigate]
   );
 
   const { onAddCart } = useCart();
@@ -58,13 +67,24 @@ export default function CollectionListPage({ type = "user" }) {
             minHeight: "100vh",
           }}
         >
-          <Text fz={36} fw={700} c="white" m={16}>
-            Our Collections
-          </Text>
+          <Flex align="center" justify="space-between" m={16}>
+            <Text fz={36} fw={700} c="white">
+              Our Collections
+            </Text>
+            {!isUser && (
+              <Button
+                leftSection={<Plus size={16} />}
+                onClick={() => navigate("/admin/collections/create")}
+              >
+                Add Collection
+              </Button>
+            )}
+          </Flex>
           <SimpleGrid cols={4} p={16} spacing="xl">
             {collections.length === 0 && <EmptyLayout />}
             {collections.map((collection) => (
               <Card
+                key={collection.id}
                 bg="black"
                 withBorder
                 shadow="sm"

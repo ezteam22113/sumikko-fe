@@ -18,7 +18,7 @@ import { ArrowLeft } from "@phosphor-icons/react";
 
 export default function UserCreatePage({ type = "create" }) {
   const navigate = useNavigate();
-  const back = () => navigate(-1);
+  const back = React.useCallback(() => navigate(-1), [navigate]);
   const query = useParams();
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -41,6 +41,7 @@ export default function UserCreatePage({ type = "create" }) {
         color: "green",
         message: result.message,
       });
+      back();
     } catch (e) {
       notifications.show({
         color: "red",
@@ -50,7 +51,7 @@ export default function UserCreatePage({ type = "create" }) {
     } finally {
       setIsLoading(false);
     }
-  }, [value, isCreate, query.id]);
+  }, [value, isCreate, query.id, back]);
 
   React.useEffect(() => {
     async function exec() {

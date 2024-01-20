@@ -26,7 +26,7 @@ import { ArrowLeft, FloppyDisk } from "@phosphor-icons/react";
 export default function CollectionCreatePage({ type = "create" }) {
   const navigate = useNavigate();
   const query = useParams();
-  const back = () => navigate(-1);
+  const back = React.useCallback(() => navigate(-1), [navigate]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [brandOption, setBrandOption] = React.useState([]);
 
@@ -51,6 +51,7 @@ export default function CollectionCreatePage({ type = "create" }) {
         color: "green",
         message: result.message,
       });
+      back();
     } catch (e) {
       notifications.show({
         color: "red",
@@ -60,7 +61,7 @@ export default function CollectionCreatePage({ type = "create" }) {
     } finally {
       setIsLoading(false);
     }
-  }, [value, isCreate, query.id]);
+  }, [value, isCreate, query.id, back]);
 
   React.useEffect(() => {
     async function exec() {
@@ -102,7 +103,7 @@ export default function CollectionCreatePage({ type = "create" }) {
         setIsLoading(false);
       }
     }
-    !isCreate && exec();
+    exec();
   }, [isCreate]);
 
   return (
@@ -171,6 +172,12 @@ export default function CollectionCreatePage({ type = "create" }) {
                   required
                   data={brandOption}
                   searchable
+                  onChange={(e) => {
+                    setValue((prev) => ({
+                      ...prev,
+                      brandId: e,
+                    }));
+                  }}
                 />
                 <Textarea
                   label="Description"

@@ -4,8 +4,16 @@ import { deleteBrand, getBrands } from "../../utils/brand-api";
 import { notifications } from "@mantine/notifications";
 import LoadingLayout from "../../components/loading-layout";
 import { DefaultLayout } from "../../components/default-layout";
-import { Button, Card, Image, SimpleGrid, Space, Text } from "@mantine/core";
-import { Eye, Trash } from "@phosphor-icons/react";
+import {
+  Button,
+  Card,
+  Flex,
+  Image,
+  SimpleGrid,
+  Space,
+  Text,
+} from "@mantine/core";
+import { Eye, Plus, Trash } from "@phosphor-icons/react";
 import EmptyLayout from "../../components/empty-layout";
 import React from "react";
 
@@ -28,6 +36,7 @@ export default function BrandListPage({ type = "user" }) {
         notifications.show({
           message: result.message,
         });
+        navigate(0);
       } catch (e) {
         notifications.show({
           message: e.message,
@@ -36,7 +45,7 @@ export default function BrandListPage({ type = "user" }) {
         });
       }
     },
-    []
+    [navigate]
   );
 
   if (isLoading) {
@@ -48,12 +57,23 @@ export default function BrandListPage({ type = "user" }) {
       <DefaultLayout type={type}>
         <Space h={24} />
         <div style={{ minHeight: "100vh" }}>
-          <Text fz={36} fw={700} c="white" m={16}>
-            Our Brands
-          </Text>
+          <Flex align="center" justify="space-between" m={16}>
+            <Text fz={36} fw={700} c="white">
+              Our Brands
+            </Text>
+            {!isUser && (
+              <Button
+                leftSection={<Plus size={16} />}
+                onClick={() => navigate("/admin/brands/create")}
+              >
+                Add Brand
+              </Button>
+            )}
+          </Flex>
           <SimpleGrid cols={6} m={16} spacing="xl">
             {data.data.map((brand) => (
               <Card
+                key={brand.is}
                 h={isUser ? 250 : 300}
                 w={200}
                 onClick={isUser ? onClickDetail(brand.id) : undefined}

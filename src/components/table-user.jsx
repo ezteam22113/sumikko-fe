@@ -18,6 +18,7 @@ export default function TableUser({ data = [] }) {
         message: result.message,
         color: "green",
       });
+      navigate(0);
     } catch (e) {
       notifications.show({
         title: "error",

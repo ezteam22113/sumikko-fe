@@ -64,11 +64,11 @@ function App() {
           },
           {
             path: "/admin/users/:id",
-            element: <UserCreatePage key="view" />,
+            element: <UserCreatePage type="view" />,
           },
           {
             path: "/admin/users/create",
-            element: <UserCreatePage key="create" />,
+            element: <UserCreatePage type="create" />,
           },
           //brand
           {
@@ -77,11 +77,11 @@ function App() {
           },
           {
             path: "/admin/brands/:id",
-            element: <BrandCreatePage key="view" />,
+            element: <BrandCreatePage type="view" />,
           },
           {
             path: "/admin/brands/create",
-            element: <BrandCreatePage key="create" />,
+            element: <BrandCreatePage type="create" />,
           },
           //collection
           {
@@ -90,11 +90,11 @@ function App() {
           },
           {
             path: "/admin/collections/:id",
-            element: <CollectionCreatePage key="view" />,
+            element: <CollectionCreatePage type="view" />,
           },
           {
             path: "/admin/collections/create",
-            element: <CollectionCreatePage key="create" />,
+            element: <CollectionCreatePage type="create" />,
           },
         ]
       : []),
@@ -103,7 +103,7 @@ function App() {
     <Routes>
       <Route path="/">
         {routes.map((route) => (
-          <Route path={route.path} element={route.element} />
+          <Route key={route.path} path={route.path} element={route.element} />
         ))}
       </Route>
     </Routes>

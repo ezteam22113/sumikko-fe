@@ -5,13 +5,18 @@ import React from "react";
 import {
   BackgroundImage,
   Button,
+  Card,
   Center,
   Container,
+  Drawer,
   Flex,
   Image,
+  SimpleGrid,
   Text,
 } from "@mantine/core";
 import { ShoppingCart, SignIn, SignOut, User } from "@phosphor-icons/react";
+import { useDisclosure } from "@mantine/hooks";
+import numeral from "numeral";
 
 export function DefaultLayout({
   children,
@@ -19,8 +24,9 @@ export function DefaultLayout({
   type = "user",
 }) {
   const isUser = type === "user";
+  const [isOpened, { close, open }] = useDisclosure();
   const { auth, onSetAuth } = useAuth();
-  const { onResetCart } = useCart();
+  const { state, onResetCart } = useCart();
 
   const navigate = useNavigate();
 
@@ -102,6 +108,7 @@ export function DefaultLayout({
             <>
               {isUser && (
                 <Button
+                  onClick={open}
                   leftSection={<ShoppingCart size={16} />}
                   variant="outline"
                 >
@@ -161,6 +168,42 @@ export function DefaultLayout({
           </Text>
         </Center>
       </div>
+      <Drawer
+        onClose={close}
+        size="45vw"
+        opened={isOpened}
+        position="right"
+        title={
+          <Text fw={700} fz={24}>
+            Cart - {state.length} Item - Total: Rp{" "}
+            {numeral(
+              state.reduce((prev, collection) => prev + collection.price, 0)
+            ).format("0,0")}
+          </Text>
+        }
+      >
+        <SimpleGrid cols={2}>
+          {state.map((collection) => (
+            <Card
+              key={collection.id}
+              withBorder
+              shadow="sm"
+              padding={0}
+              radius="md"
+              w={300}
+              h={200}
+            >
+              <Image src={collection.image} w={300} h={150} fit="contain" />
+              <Text ta="center" fz={16} fw={700} truncate="end" mx={8}>
+                {collection.name} - {collection.Brand.name}
+              </Text>
+              <Text ta="center" fz={16}>
+                Rp {numeral(collection.price).format("0,0")}
+              </Text>
+            </Card>
+          ))}
+        </SimpleGrid>
+      </Drawer>
     </Container>
   );
 }

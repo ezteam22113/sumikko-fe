@@ -76,7 +76,13 @@ export default function HomePage({ type = "user" }) {
 
             <SimpleGrid cols={3} spacing="xl">
               {contents.map((content) => (
-                <Card withBorder shadow="xs" radius="md" bg="transparent">
+                <Card
+                  key={content.title}
+                  withBorder
+                  shadow="xs"
+                  radius="md"
+                  bg="transparent"
+                >
                   <Image h={300} src={content.url} />
                   <Space h={24} />
 
