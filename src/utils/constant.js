@@ -1,1 +1,1 @@
-export const endpoint = 'http://localhost:8000/api';
+export const endpoint = 'https://sumikko-be-production.up.railway.app/api';
